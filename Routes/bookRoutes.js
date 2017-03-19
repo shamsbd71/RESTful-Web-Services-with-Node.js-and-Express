@@ -4,14 +4,10 @@ var routes = function(Book){
 
 	// create router
 	var bookRouter = express.Router();
-	bookRouter.route('/')
-	.post(function(req, res){
-		var book = new Book(req.body);
-		book.save();
-		// console.log(book);
+	var bookController = require('../Controllers/bookController')(Book);
 
-		res.status(201).send(book);
-	})
+	bookRouter.route('/')
+	.post(bookController.post)
 	.get(function(req, res){
 		// real output from mongodb
 		var query = {};
@@ -24,7 +20,7 @@ var routes = function(Book){
 		if(req.query.author){
 			query.author = req.query.author;
 		}
-		
+
 	  	// real output from mongodb
 	  	Book.find(query, function(err, books){
 	  		if(err)
